@@ -3,7 +3,7 @@ name: b2b-lead-generation
 description: "Aggregate B2B lead-gen skill: customs trade intelligence + global company due-diligence + LinkedIn data. Analyze HS code market distribution/trends/shares, profile a company's trade scale/partners/products/ports, get macro trade overviews and top buyers/suppliers, run company background checks (employees, shareholders/UBO, decision-makers), map LinkedIn networks (colleagues, alumni, career & education).
 
 Trigger: B2B lead generation, customs trade analysis, HS code search, trade area distribution, import export trends, trade percentage by company, company trade statistics, trade partner analysis, macro trade overview, top buyers suppliers, US import data, global company search, company employee list, shareholder UBO, person search, colleague alumni, work experience education history, school detail, due diligence background check, LinkedIn company search, LinkedIn people search, professional network mapping, executive headhunting, overseas lead generation, cross-border supplier sourcing"
-metadata: {"version":"1.0.0","homepage":"https://www.upkuajing.com","clawdbot":{"emoji":"🎯","requires":{"bins":["python"],"env":["UPKUAJING_API_KEY"]},"primaryEnv":"UPKUAJING_API_KEY"}}
+metadata: {"version":"1.0.1","homepage":"https://www.upkuajing.com","clawdbot":{"emoji":"🎯","requires":{"bins":["python"],"env":["UPKUAJING_API_KEY"]},"primaryEnv":"UPKUAJING_API_KEY"}}
 ---
 
 # B2B Lead Generation
@@ -94,6 +94,15 @@ When API response indicates insufficient balance:
 
 Newly applied keys must be registered/bound at [UpKuaJing Open Platform](https://developer.upkuajing.com/).
 
+### **Report Skill Call Errors**
+When an API call fails or returns abnormal data (server error, timeout, malformed response, etc.), explain the anomaly to the user in natural language and ask whether to report it to the platform for troubleshooting. Only run the report after user confirmation:
+```bash
+python scripts/error_report.py --params '{"requestPath":"/agent/customs/analysis/area","requestId":"f47ac10b58cc4372a5670e02b2c3d479","context":"Customs area distribution query failed with a server error"}'
+```
+- Do not report normal business conditions (insufficient balance, invalid API key, parameter errors) — handle them via their own flows
+- Error reporting does not incur query fees
+- **Parameters**: See [Error Report API](references/skill-error-report-api.md)
+
 ## Fees
 
 **All API calls incur fees**; billing methods differ per interface.
@@ -119,6 +128,7 @@ python scripts/auth.py --price_info
 - **API key invalid/non-existent**: check `UPKUAJING_API_KEY` in `~/.upkuajing/.env`
 - **Insufficient balance**: guide user to top up
 - **Invalid parameters**: **must first check the corresponding API doc in `references/`** - get correct parameter names/formats from documentation, do not guess
+- **Skill call errors / abnormal responses**: Explain to the user and, with user confirmation, report to the platform via `python scripts/error_report.py` (see [Report Skill Call Errors](#report-skill-call-errors))
 
 ### API Documentation Reference
 
@@ -136,6 +146,7 @@ python scripts/auth.py --price_info
 
 **linkedin** (route: [indexes/linkedin.md](indexes/linkedin.md))
 - [linkedin-company-list](references/linkedin-company-list-api.md) | [linkedin-company-employee-list](references/linkedin-company-employee-list-api.md) | [linkedin-person-list](references/linkedin-person-list-api.md) | [linkedin-person-colleague-list](references/linkedin-person-colleague-list-api.md) | [linkedin-person-alumni-list](references/linkedin-person-alumni-list-api.md) | [linkedin-person-experience-list](references/linkedin-person-experience-list-api.md) | [linkedin-person-education-list](references/linkedin-person-education-list-api.md) | [linkedin-school-detail](references/linkedin-school-detail-api.md)
+- Error Report: Check [references/skill-error-report-api.md](references/skill-error-report-api.md)
 
 ## Notes
 
